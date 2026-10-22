@@ -180,6 +180,8 @@ Obese policyholders cost 43% more than underweight ones and 49% more than those 
 
 ---
 
+![EDA Risk Factors](eda_risk_factors.png)
+
 ### Chart 4: Distribution of Insurance Charges
 
 **What the chart shows:** A histogram of all 1,338 policyholders' annual charges, with vertical lines marking the mean ($13,270 in red) and the median ($9,382 in orange).
@@ -362,7 +364,9 @@ We ran K-Means for K = 2 through K = 7 and confirmed that 4 clusters provides a 
 
 **Very High Risk (273 people):** 100% smokers. Average age 38.6 — not particularly old. Average charges $32,121 — more than twice the High Risk group despite being younger. This confirms that smoking alone is sufficient to create extreme cost regardless of age.
 
-### Cluster Visualisations (risk_segmentation.png)
+### Cluster Visualisations
+
+![Risk Segmentation](risk_segmentation.png)
 
 **Left plot — Age vs Charges:**  
 The four risk tiers form distinct bands on this scatter. The Very High Risk (dark red) dots sit at the top across all ages — high charges regardless of how old the person is. The High Risk (salmon/pink) dots form a rising band from the middle-right area, climbing as age increases. The Low Risk (blue) and Medium Risk (orange) dots cluster at the bottom-left — young and cheap.
@@ -475,7 +479,9 @@ region_enc  0.0000   (0% — not used)
 
 Age, smoking, and BMI together explain 100% of the tree's decisions. Sex, region, and number of children are irrelevant to cost once age, BMI, and smoking are accounted for. This is consistent with the EDA findings.
 
-### Reading the Decision Tree (decision_tree.png)
+### Reading the Decision Tree
+
+![Decision Tree](decision_tree.png)
 
 The tree is visualised as a flow of boxes (nodes) connected by branches.
 
@@ -626,7 +632,9 @@ The 20% loading combined with a young, lower-cost population creates a large pre
 
 This creates a **competitive risk**: other insurers offering lower premiums could attract this segment away. A loss ratio this low also invites regulatory scrutiny — insurers are expected to price fairly. The 20% loading on Medium Risk may be too aggressive given their actual charge profile.
 
-### Loss Ratio Chart (loss_ratio_analysis.png)
+### Loss Ratio Chart
+
+![Loss Ratio Analysis](loss_ratio_analysis.png)
 
 **Left chart — Loss Ratio by Risk Tier (bar chart with threshold lines):**  
 Three bars for High, Low, and Medium Risk. A red dashed line at 85% marks the upper acceptable threshold. A green dashed line at 70% marks the lower bound. High Risk (82.5%) sits comfortably inside the target band. Low Risk (92.1%) breaches the red line — shown in a different colour. Medium Risk (57.1%) sits well below the green line.
