@@ -1,0 +1,4 @@
+risk_tier,Policies,Total_Claims,Total_Premium,Avg_Claim,Avg_Premium,Loss_Ratio_%,Profitable
+High Risk,429,5432225.01,6587601.5,12662.53,15355.71,82.5,Yes
+Low Risk,383,2070423.84,2248486.28,5405.81,5870.72,92.1,No
+Medium Risk,252,1471412.62,2577943.41,5838.94,10229.93,57.1,Yes

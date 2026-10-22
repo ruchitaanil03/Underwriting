@@ -1,0 +1,11 @@
+Factor,Relativity
+Non-Smoker,0.636
+Smoker,2.415
+Age 18-30,0.708
+Age 31-40,0.877
+Age 41-50,1.114
+Age 51+,1.363
+BMI Underweight,0.652
+BMI Normal,0.786
+BMI Overweight,0.829
+BMI Obese,1.173
