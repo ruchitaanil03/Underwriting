@@ -129,9 +129,9 @@ The output is saved as `eda_risk_factors.png` a 2x2 panel of four charts.
 
 Smokers cost nearly **4x more** than non-smokers. This is the single strongest risk factor in the dataset.
 
-**Why this matters for underwriting:** No underwriter can ignore smoking status. A smoker paying the same premium as a non-smoker would create a massive loss — the insurer would collect $8,434 worth of premium but pay out $32,050 in claims. This is why smoker status is a mandatory rating factor in health insurance.
+**Why this matters for underwriting:** No underwriter can ignore smoking status. A smoker paying the same premium as a non-smoker would create a massive loss, the insurer would collect $8,434 worth of premium but pay out $32,050 in claims. This is why smoker status is a mandatory rating factor in health insurance.
 
-**Medical explanation:** Smoking causes lung cancer, COPD, cardiovascular disease, and stroke — all conditions that generate sustained, high-cost healthcare use. These are not one-off claims but years of ongoing treatment.
+**Medical explanation:** Smoking causes lung cancer, COPD, cardiovascular disease, and stroke, all conditions that generate sustained, high-cost healthcare use. These are not one-off claims but years of ongoing treatment.
 
 ---
 
