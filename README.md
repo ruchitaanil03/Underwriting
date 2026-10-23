@@ -1,6 +1,6 @@
 # Health Insurance Underwriting Engine
 
-A placement-level health insurance underwriting project that combines actuarial rating factors, K-Means risk segmentation, and a Decision Tree classifier to produce interpretable accept/refer/decline decisions for individual policyholders.
+A health insurance underwriting project that combines actuarial rating factors, K-Means risk segmentation, and a Decision Tree classifier to produce interpretable accept/refer/decline decisions for individual policyholders.
 
 **Dataset:** [US Health Insurance Dataset](https://www.kaggle.com/datasets/mirichoi0218/insurance) — 1,338 rows, 7 columns  
 **Tools:** Python, pandas, scikit-learn, matplotlib, seaborn  
