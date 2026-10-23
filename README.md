@@ -34,7 +34,7 @@ A health insurance underwriting project that combines actuarial rating factors, 
 
 An underwriter evaluates risk. If someone is likely to make large claims, the insurer either charges them more (premium loading), sends them to a senior specialist (refer), or refuses to insure them (decline). If someone is low risk, they are accepted at the standard premium.
 
-The goal of underwriting is not to reject everyone — it is to make sure that every accepted policy is priced correctly so the insurer remains profitable. Too cheap on high-risk people and the company loses money. Too expensive on low-risk people and they go elsewhere.
+The goal of underwriting is not to reject everyone, it is to make sure that every accepted policy is priced correctly so the insurer remains profitable. Too cheap on high-risk people and the company loses money. Too expensive on low-risk people and they go elsewhere.
 
 **Key terms used throughout this project:**
 
@@ -94,7 +94,7 @@ underwriting/
 | children | 1.09    | 1.21     | 0       | 1       | 5        |
 | charges  | $13,270 | $12,110  | $1,122  | $9,382  | $63,770  |
 
-The large standard deviation in charges ($12,110) relative to the mean ($13,270) tells us there is enormous variation in costs — a small number of very expensive policyholders pulling the average up significantly. The median ($9,382) is much lower than the mean, confirming this right-skew.
+The large standard deviation in charges ($12,110) relative to the mean ($13,270) tells us there is enormous variation in costs: a small number of very expensive policyholders pulling the average up significantly. The median ($9,382) is much lower than the mean, confirming this right-skew.
 
 **BMI Classification (WHO Standard):**
 
@@ -107,16 +107,16 @@ The large standard deviation in charges ($12,110) relative to the mean ($13,270)
 
 ---
 
-## Step 1 — Exploratory Data Analysis
+## Step 1: Exploratory Data Analysis
 
 **What is EDA?**  
-Exploratory Data Analysis is the process of understanding the data before building any model. We look at distributions, relationships between variables, and anything unusual. In insurance, EDA tells us which characteristics (age, BMI, smoking) actually drive high claims — so we know what to model.
+Exploratory Data Analysis is the process of understanding the data before building any model. We look at distributions, relationships between variables, and anything unusual. In insurance, EDA tells us which characteristics (age, BMI, smoking) actually drive high claims so we know what to model.
 
-The output is saved as `eda_risk_factors.png` — a 2x2 panel of four charts.
+The output is saved as `eda_risk_factors.png` a 2x2 panel of four charts.
 
 ---
 
-### Chart 1: Average Charges — Smoker vs Non-Smoker
+### Chart 1: Average Charges: Smoker vs Non-Smoker
 
 **What the chart shows:** Two bars comparing the average annual medical charge for smokers (yes) and non-smokers (no).
 
@@ -174,7 +174,7 @@ Charges increase by roughly 20–27% with each decade of age. The 51+ band costs
 
 Obese policyholders cost 43% more than underweight ones and 49% more than those with a normal BMI.
 
-**Why this matters for underwriting:** Obesity is directly linked to type 2 diabetes, hypertension, cardiovascular disease, joint problems, and sleep apnoea. These conditions are expensive to manage long-term. Unlike smoking (a binary yes/no), BMI gives a graded risk — the higher the BMI, the higher the expected cost.
+**Why this matters for underwriting:** Obesity is directly linked to type 2 diabetes, hypertension, cardiovascular disease, joint problems, and sleep apnoea. These conditions are expensive to manage long-term. Unlike smoking (a binary yes/no), BMI gives a graded risk, the higher the BMI, the higher the expected cost.
 
 **Note on the Obese category:** BMI ≥ 30 covers a very wide range — a person with BMI 31 is categorised the same as someone with BMI 50, even though their risk is very different. In real underwriting, the obese band is often split further (e.g. 30–35, 35–40, 40+). The cluster analysis in Step 3 captures this more granularly.
 
@@ -187,20 +187,20 @@ Obese policyholders cost 43% more than underweight ones and 49% more than those 
 **What the chart shows:** A histogram of all 1,338 policyholders' annual charges, with vertical lines marking the mean ($13,270 in red) and the median ($9,382 in orange).
 
 **What we see:**  
-The distribution is strongly **right-skewed** — the long tail extends to the right. Most policyholders cluster in the $1,000–$15,000 range, but a significant number have charges above $30,000, and some reach $60,000+.
+The distribution is strongly **right-skewed** the long tail extends to the right. Most policyholders cluster in the $1,000–$15,000 range, but a significant number have charges above $30,000, and some reach $60,000+.
 
-**Why the mean is above the median:** When a distribution is right-skewed, a small number of very large values pull the mean upward. The median is not affected by these outliers. In this dataset, the mean ($13,270) is $3,888 higher than the median ($9,382) — entirely because of a relatively small number of very high-cost policyholders (mostly smokers).
+**Why the mean is above the median:** When a distribution is right-skewed, a small number of very large values pull the mean upward. The median is not affected by these outliers. In this dataset, the mean ($13,270) is $3,888 higher than the median ($9,382) entirely because of a relatively small number of very high-cost policyholders (mostly smokers).
 
-**What this means for pricing:** If an insurer priced every policy at the median ($9,382), they would lose money — the average cost they actually pay out is $13,270. This is why actuaries use the mean for premium setting, not the median. The distribution also justifies why we need to segment policyholders: a one-size-fits-all premium cannot work when some individuals cost $1,000 and others cost $63,000.
+**What this means for pricing:** If an insurer priced every policy at the median ($9,382), they would lose money, the average cost they actually pay out is $13,270. This is why actuaries use the mean for premium setting, not the median. The distribution also justifies why we need to segment policyholders: a one-size-fits-all premium cannot work when some individuals cost $1,000 and others cost $63,000.
 
 **Two humps visible in the histogram:** Looking carefully, the distribution has a primary peak around $3,000–$5,000 (non-smokers, younger) and a secondary cluster around $35,000–$45,000 (smokers). This bimodal shape is a visual confirmation that smokers and non-smokers form two fundamentally different risk populations.
 
 ---
 
-## Step 2 — Actuarial Rating Factors
+## Step 2: Actuarial Rating Factors
 
 **What is actuarial rating?**  
-Actuarial rating is the methodology insurers use to price individual policies. Instead of charging everyone the same amount, the insurer adjusts the base premium up or down based on the policyholder's specific risk characteristics. Each adjustment is expressed as a **relativity** — a multiplier.
+Actuarial rating is the methodology insurers use to price individual policies. Instead of charging everyone the same amount, the insurer adjusts the base premium up or down based on the policyholder's specific risk characteristics. Each adjustment is expressed as a **relativity** a multiplier.
 
 This approach is the standard in all personal lines insurance (health, auto, home). It is regulated — insurers must justify their rating factors with data.
 
@@ -212,7 +212,7 @@ Base Rate = Overall average charges across all policyholders
 Base Rate = $13,270.42
 ```
 
-The base rate is the premium you would charge if you knew nothing about the individual — you would simply charge everyone the population average. Rating factors then adjust this up or down based on what you do know about them.
+The base rate is the premium you would charge if you knew nothing about the individual, you would simply charge everyone the population average. Rating factors then adjust this up or down based on what you do know about them.
 
 ### Relativity Formula
 
@@ -249,7 +249,7 @@ This means smokers cost 2.415 times the average. A relativity of 1.0 means a gro
 Base Premium = Base Rate × Smoker Relativity × Age Band Relativity × BMI Band Relativity
 ```
 
-This is a **multiplicative model** — each factor multiplies the previous result. This is the standard approach in insurance rating because risk factors interact multiplicatively, not additively.
+This is a **multiplicative model**,  each factor multiplies the previous result. This is the standard approach in insurance rating because risk factors interact multiplicatively, not additively.
 
 **Why multiplicative and not additive?**  
 Suppose being a smoker adds $19,000 (the smoker–non-smoker gap). If we used additive factors, a young non-obese person would get:
@@ -258,7 +258,7 @@ Suppose being a smoker adds $19,000 (the smoker–non-smoker gap). If we used ad
 $13,270 + $19,000 = $32,270 (smoker premium — seems large but let's continue)
 ```
 
-Now a 55-year-old obese smoker: we'd just keep adding. But in reality, a 55-year-old obese smoker's costs are not the sum of three independent penalties. Obesity at age 55 combined with smoking creates compounding health risks — the interaction is multiplicative. Multiplicative models capture this correctly.
+Now a 55-year-old obese smoker: we'd just keep adding. But in reality, a 55-year-old obese smoker's costs are not the sum of three independent penalties. Obesity at age 55 combined with smoking creates compounding health risks,  the interaction is multiplicative. Multiplicative models capture this correctly.
 
 ### Worked Example
 
@@ -290,12 +290,12 @@ The same base rate produces very different premiums depending on the individual'
 
 ---
 
-## Step 3 — Risk Segmentation with K-Means Clustering
+## Step 3: Risk Segmentation with K-Means Clustering
 
 **What is K-Means Clustering?**  
-K-Means is an **unsupervised machine learning** algorithm that groups data points into K clusters based on similarity. It does not use any pre-defined labels — it finds natural groupings in the data by minimising the distance between each point and its cluster centre.
+K-Means is an **unsupervised machine learning** algorithm that groups data points into K clusters based on similarity. It does not use any pre-defined labels, it finds natural groupings in the data by minimising the distance between each point and its cluster centre.
 
-**Unsupervised** means we are not telling the algorithm what the answer should be. We are saying: "find natural groups in this data" — and it does so without being given any outcome variable to predict.
+**Unsupervised** means we are not telling the algorithm what the answer should be. We are saying: "find natural groups in this data" and it does so without being given any outcome variable to predict.
 
 ### The K-Means Algorithm
 
@@ -331,7 +331,7 @@ This is necessary because K-Means uses Euclidean distance. Without standardisati
 age, bmi, smoker (encoded as 0 for no, 1 for yes), charges
 ```
 
-Note that charges is included in clustering because we want to find risk groups partly defined by their actual cost history. This is the actuarial approach — group people who actually behave similarly.
+Note that charges is included in clustering because we want to find risk groups partly defined by their actual cost history. This is the actuarial approach, group people who actually behave similarly.
 
 ### Why 4 Clusters?
 
@@ -362,7 +362,7 @@ We ran K-Means for K = 2 through K = 7 and confirmed that 4 clusters provides a 
 
 **High Risk (429 people):** The oldest group (avg 53.5), moderately obese, zero smokers. Their charges ($12,663) are driven purely by age — accumulated chronic conditions in older non-smokers. These are referred because their risk profile warrants senior underwriter review, particularly for any pre-existing condition disclosures.
 
-**Very High Risk (273 people):** 100% smokers. Average age 38.6 — not particularly old. Average charges $32,121 — more than twice the High Risk group despite being younger. This confirms that smoking alone is sufficient to create extreme cost regardless of age.
+**Very High Risk (273 people):** 100% smokers. Average age 38.6 not particularly old. Average charges $32,121 more than twice the High Risk group despite being younger. This confirms that smoking alone is sufficient to create extreme cost regardless of age.
 
 ### Cluster Visualisations
 
@@ -376,12 +376,12 @@ The Very High Risk cluster (dark red) hovers at the top across all BMI values. T
 
 ---
 
-## Step 4 — Decision Tree Classifier
+## Step 4: Decision Tree Classifier
 
 **What is a Decision Tree?**  
 A Decision Tree is a supervised machine learning model that learns a set of if-then-else rules to classify data. It works by repeatedly asking questions about the input features ("is this person a smoker?", "is their age above 42?") and splitting the data based on the answers until it reaches a decision.
 
-**Supervised** means the algorithm is trained on labelled examples — it learns from data where we already know the correct answer (the risk tier from clustering).
+**Supervised** means the algorithm is trained on labelled examples, it learns from data where we already know the correct answer (the risk tier from clustering).
 
 **Why a Decision Tree and not logistic regression or a neural network?**  
 - **Interpretability:** Every decision is traceable. An underwriter can look at the tree and understand exactly why an applicant was accepted or declined. Regulators require this.
@@ -401,13 +401,13 @@ A perfectly pure node (all one class) has Gini = 0
 A perfectly mixed node (equal split between all classes) has maximum Gini
 ```
 
-At each split, the algorithm tries every possible threshold for every feature and picks the split that most reduces Gini impurity — i.e. makes the resulting groups as pure as possible.
+At each split, the algorithm tries every possible threshold for every feature and picks the split that most reduces Gini impurity i.e. makes the resulting groups as pure as possible.
 
 **Example:** At the root of our tree, the first split is `smoker_enc <= 0.5`. This means:
 - If smoker = 0 (non-smoker): go left
 - If smoker = 1 (smoker): go right
 
-This split reduces impurity the most because smokers and non-smokers have dramatically different class distributions — splitting on smoking first immediately separates the Very High Risk group from the rest.
+This split reduces impurity the most because smokers and non-smokers have dramatically different class distributions splitting on smoking first immediately separates the Very High Risk group from the rest.
 
 ### Tree Parameters
 
@@ -452,7 +452,7 @@ Precision for DECLINE = 1.00 → Every time the model said DECLINE, it was right
 Recall for ACCEPT = 0.95 → The model correctly identified 95% of all actual ACCEPTs
 ```
 
-**F1-Score** = Harmonic mean of precision and recall — the overall quality metric for each class  
+**F1-Score** = Harmonic mean of precision and recall, the overall quality metric for each class  
 ```
 F1 = 2 × (Precision × Recall) / (Precision + Recall)
 ```
@@ -516,7 +516,7 @@ The tree's logic is fully transparent. Any decision can be explained in plain En
 
 ---
 
-## Step 5 — Underwriting Output and Premium Loading
+## Step 5: Underwriting Output and Premium Loading
 
 ### Premium Loading
 
@@ -568,7 +568,7 @@ Out of 1,338 applicants:
 | DECLINE              | 274   | 20.5% |
 | ACCEPT WITH LOADING  | 230   | 17.2% |
 
-One in five applicants is declined (all smokers). One in three is referred — typically older non-smokers with elevated BMI who need senior review. Together, 46.1% of applicants are either declined or referred, reflecting the genuine risk concentration in this dataset.
+One in five applicants is declined (all smokers). One in three is referred, typically older non-smokers with elevated BMI who need senior review. Together, 46.1% of applicants are either declined or referred, reflecting the genuine risk concentration in this dataset.
 
 ### Sample Underwriting Output Table
 
@@ -584,7 +584,7 @@ One in five applicants is declined (all smokers). One in three is referred — t
 
 ---
 
-## Step 6 — Loss Ratio Analysis
+## Step 6: Loss Ratio Analysis
 
 **What is Loss Ratio?**  
 The loss ratio is the most important profitability metric in insurance. It tells you what fraction of the premium collected is paid back out as claims.
@@ -615,7 +615,7 @@ Only accepted applicants (ACCEPT, ACCEPT WITH LOADING, REFER) are included. Decl
 | Low Risk    | 383      | $2,070,424     | $2,248,486     | $5,406      | $5,871      | 92.1%      | No         |
 | Medium Risk | 252      | $1,471,413     | $2,577,943     | $5,839      | $10,230     | 57.1%      | Yes        |
 
-**Overall Portfolio Loss Ratio: 78.6%** — within the healthy 70–85% target band.
+**Overall Portfolio Loss Ratio: 78.6%** within the healthy 70–85% target band.
 
 ### Detailed Interpretation of Each Segment
 
@@ -623,14 +623,14 @@ Only accepted applicants (ACCEPT, ACCEPT WITH LOADING, REFER) are included. Decl
 The 40% loading applied to REFER decisions is working. Average premium ($15,356) is sufficiently above average claims ($12,663). The extra loading compensates for the age-driven cost of this group. This is the largest segment by volume (429 policies) and it is priced correctly.
 
 **Low Risk — Loss Ratio 92.1% (Not Profitable)**  
-The zero loading means premium = base rate = $5,871 average. But the actual average claim is $5,406 — very close to the premium. With no loading buffer, any unexpected claims push this segment into loss. The 92.1% loss ratio exceeds the 85% threshold.
+The zero loading means premium = base rate = $5,871 average. But the actual average claim is $5,406, very close to the premium. With no loading buffer, any unexpected claims push this segment into loss. The 92.1% loss ratio exceeds the 85% threshold.
 
 This is a **pricing adequacy problem**: the base rate for young, low-BMI non-smokers is slightly too low relative to their actual claims. In a real portfolio, this would trigger a base rate review. Options include: a small upward revision to the base rate, or applying a modest 5–10% loading to Low Risk rather than zero.
 
 **Medium Risk — Loss Ratio 57.1% (Profitable but overpriced)**  
 The 20% loading combined with a young, lower-cost population creates a large premium-to-claim gap. Average premium ($10,230) is 75% above average claims ($5,839). This means medium-risk policyholders are being significantly overcharged.
 
-This creates a **competitive risk**: other insurers offering lower premiums could attract this segment away. A loss ratio this low also invites regulatory scrutiny — insurers are expected to price fairly. The 20% loading on Medium Risk may be too aggressive given their actual charge profile.
+This creates a **competitive risk**: other insurers offering lower premiums could attract this segment away. A loss ratio this low also invites regulatory scrutiny, insurers are expected to price fairly. The 20% loading on Medium Risk may be too aggressive given their actual charge profile.
 
 ### Loss Ratio Chart
 
